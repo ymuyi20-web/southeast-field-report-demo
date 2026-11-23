@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>东南大区工作日报</title>
+<meta name="description" content="东南大区农艺师工作日报试用台账">
+<style>
+:root{--ink:#172b24;--muted:#53665e;--line:#dce7df;--green:#146744;--dark:#0c3327;--wash:#f2f6f3;--white:#fff;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:var(--wash);color:var(--ink);font:16px/1.6 "Microsoft YaHei","PingFang SC","Noto Sans CJK SC",system-ui,sans-serif}
+[hidden]{display:none!important}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+button:disabled{cursor:default;opacity:.5}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #77ba99;outline-offset:3px}
+.frame{width:min(1170px,calc(100% - 56px));margin:auto}
+.bar{background:#fff;border-bottom:1px solid var(--line)}
+.top{display:flex;min-height:74px;align-items:center;justify-content:space-between;gap:20px}
+.identity{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.mark{width:39px;height:39px;background:var(--green);color:white;display:grid;place-items:center;border-radius:11px;font-weight:750;font-size:21px}
+.identity strong{font-size:17px;display:block;line-height:1.3}
+.identity div span{font-size:13px;color:var(--muted);display:block}
+nav{display:flex;align-items:center;gap:6px}
+nav button,.subtle,.tabs button{border:0;background:transparent;color:var(--muted);border-radius:8px;padding:9px 13px;white-space:nowrap}
+nav button[aria-current],.tabs button[aria-pressed=true]{color:var(--green);background:#e6f1e9;font-weight:700}
+button:hover:not(:disabled){filter:brightness(.96)}
+.primary,nav .primary{border:1px solid var(--green);background:var(--green);color:white;padding:9px 16px;border-radius:8px;font-weight:700;white-space:nowrap}
+nav .primary[aria-current]{background:var(--dark);color:white}
+.subtle{background:#edf3ef;color:var(--green);font-weight:650}
+.intro{margin:30px 0 20px;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:28px 32px;background:var(--dark);color:white;border-radius:16px}
+.intro p{margin:3px 0 0;color:#d2e7db}
+.intro .overline{margin:0 0 4px;color:#a8d8bd;font-size:14px;letter-spacing:.08em}
+h1,h2,h3{line-height:1.25;margin:0}
+h1{font-size:clamp(1.65rem,4vw,2.5rem);letter-spacing:-.02em}
+h2{font-size:1.3rem}h3{font-size:1.1rem}
+.pill{display:inline-block;font-size:13px;border-radius:99px;padding:4px 10px;background:#235744;color:#effbf4;white-space:nowrap}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 16px}
+.metric,.panel,.card{border:1px solid var(--line);background:white;border-radius:13px}
+.metric{padding:12px 17px;color:var(--muted);display:flex;align-items:baseline;gap:12px}
+.metric strong{font-size:26px;color:var(--dark);line-height:1.25}
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:12px;align-items:end;padding:14px 16px}
+.filters button{min-height:43px}
+label{display:grid;gap:5px;font-size:14px;font-weight:700}
+input,select,textarea{width:100%;min-width:0;max-width:100%;color:var(--ink);background:white;min-height:43px;border:1px solid #cbd9ce;border-radius:8px;padding:8px 10px;font-weight:400}
+textarea{resize:vertical}
+.list-head{display:flex;justify-content:space-between;align-items:center;margin:17px 0 11px;gap:8px}
+#count,.meta,small,#system-status{color:var(--muted);font-size:14px}
+.tabs{display:flex;gap:4px}
+.records{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.card{display:grid;grid-template-columns:minmax(0,1fr) 118px;gap:14px;min-width:0;padding:15px}
+.card-text{min-width:0;display:flex;flex-direction:column;align-items:flex-start}
+.card h2{font-size:19px}
+.meta{margin:4px 0 8px}
+.excerpt{margin:0 0 10px;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.open-report,.source{border:0;background:none;color:var(--green);font-size:14px;font-weight:700;padding:4px 0;text-align:left}
+.open-report{margin-top:auto}
+.open-report:hover,.source:hover{text-decoration:underline}
+.thumb,.photo-button{border:0;background:#eaf1eb;border-radius:8px;padding:0;overflow:hidden;display:block}
+.thumb{height:103px;width:100%;align-self:start}
+.thumb img,.photo-button img{height:100%;width:100%;object-fit:cover;display:block}
+.badge{font-size:13px;color:var(--green);margin-left:6px;font-weight:500}
+.empty{grid-column:1/-1;text-align:center;padding:30px 16px;color:var(--muted)}
+.form-panel{max-width:760px;padding:22px;display:grid;gap:18px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.with-history{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px;margin-top:5px}
+.with-history select{width:6.25rem;padding-inline:6px}
+.with-history select:disabled{display:none}
+.with-history:has(select:disabled){grid-template-columns:1fr}
+.attach{display:grid;gap:5px}
+.selection,.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.selection span{background:#edf3ef;border-radius:7px;padding:3px 8px;font-size:13px;overflow-wrap:anywhere}
+#form-status,#summary-status{font-size:14px;color:var(--muted)}
+.summarizer{grid-template-columns:1fr 1fr auto auto}
+#summary-status{grid-column:1/-1}
+#summary-status:empty{display:none}
+.summary-output{margin-top:16px;padding:20px}
+.summary-output article{padding:13px 0;border-bottom:1px solid var(--line)}
+.summary-output article:last-child{border:0;padding-bottom:0}
+.summary-output article p{margin:5px 0;white-space:pre-wrap;overflow-wrap:anywhere}
+dialog{border:1px solid var(--line);border-radius:15px;padding:20px;max-width:min(720px,calc(100% - 22px));width:700px;max-height:88dvh;color:var(--ink);overflow:auto}
+dialog::backdrop{background:#102820aa}
+.dialog-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+.detail-text{white-space:pre-wrap;overflow-wrap:anywhere;margin:6px 0 15px}
+.detail-section{margin-top:14px}
+.gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.photo-button{height:120px}
+#lightbox{width:max-content;max-width:calc(100% - 22px)}
+#full-photo{display:block;max-height:72dvh;max-width:100%;object-fit:contain}
+#system-status{margin:14px 0 22px}
+@media(max-width:760px){.frame{width:calc(100% - 28px)}.top{min-height:66px;gap:7px}.identity{gap:7px}.identity div span{display:none}.identity strong{font-size:14px}.mark{width:32px;height:32px;font-size:16px}nav{gap:2px}nav button,nav .primary{padding:8px 6px;font-size:14px}.intro{margin-top:15px;padding:18px 16px;flex-direction:column;gap:8px}.metrics{gap:6px}.metric{display:grid;padding:10px;gap:2px;font-size:14px}.filters{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.lookup{grid-column:1/-1}.records{grid-template-columns:1fr}.form-panel{padding:15px}.photo-button{height:84px}}
+@media(max-width:520px){.form-grid{grid-template-columns:1fr}}
+@media(max-width:360px){.identity strong{display:none}.card{grid-template-columns:minmax(0,1fr) 80px}}
+
+</style>
+
+</head>
+<body>
+<header class="bar"><div class="frame top"><div class="identity"><span class="mark" aria-hidden="true">农</span><div><strong>农化服务</strong><span>东南大区</span></div></div>
+<nav aria-label="工作日报入口"><button type="button" data-page="ledger" aria-current="page">日报台账</button><button type="button" data-page="summary">汇总简报</button><button type="button" data-page="form" class="primary">＋ 填报日报</button></nav></div></header>
+<main class="frame">
+<section id="ledger">
+<div class="intro"><div><p class="overline">农艺服务 · 东南大区</p><h1>工作日报台账</h1><p>内置四份虚拟日报。试填数据只保存在当前浏览器，请使用虚拟资料。</p></div><span class="pill">公开演示 · 虚拟数据</span></div>
+<div id="metrics" class="metrics"></div>
+<div class="panel filters"><label class="lookup">关键词<input type="search" id="query" placeholder="搜地点、作物或工作内容"></label><label>汇报人<select id="person"><option value="">全部人员</option></select></label><label>开始日期<input type="date" id="from"></label><label>结束日期<input type="date" id="to"></label><button id="reset" class="subtle" type="button">清空</button></div>
+<div class="list-head"><div class="tabs"><button id="all" aria-pressed="true">全部记录</button><button id="focused" aria-pressed="false">我的关注</button></div><span id="count" aria-live="polite"></span></div>
+<div id="records" class="records"></div>
+</section>
+<section id="form" hidden>
+<div class="intro compact"><div><p class="overline">农艺服务 · 东南大区</p><h1>填报工作日报</h1><p>请用虚拟内容和测试图片。提交只保存在当前浏览器。</p></div><span class="pill">公开演示 · 虚拟数据</span></div>
+<form id="report-form" class="panel form-panel">
+<div class="form-grid">
+<div><label for="author">汇报人</label><div class="with-history"><input id="author" name="author" required maxlength="32" placeholder="输入姓名"><select id="author-history" aria-label="选择历史姓名" disabled><option value="">历史姓名</option></select></div></div>
+<label>所属区域<input id="region" name="region" maxlength="40" placeholder="例如 东南-福建"></label>
+<div><label for="place">工作地点</label><div class="with-history"><input id="place" name="place" required maxlength="70" placeholder="输入地点"><select id="place-history" aria-label="选择历史地点" disabled><option value="">历史地点</option></select></div></div>
+<label>工作日期<input id="date" name="date" type="date" required></label>
+</div>
+<label>今日工作<textarea name="work" required rows="5" maxlength="6000" placeholder="写做了什么、看到什么，或直接粘贴群汇报文字"></textarea></label>
+<label>明日计划<textarea name="plan" rows="2" maxlength="2000" placeholder="有安排时填写"></textarea></label>
+<div class="attach"><label>现场照片<input id="photos" type="file" multiple accept="image/*"></label><small>可选现场原图或现有水印拼图，最多 9 张。</small><div id="selection" class="selection"></div></div>
+<div class="actions"><button class="primary" id="submit" type="submit">提交日报</button><span id="form-status" role="status"></span></div>
+</form>
+</section>
+<section id="summary" hidden>
+<div class="intro compact"><div><p class="overline">农艺服务 · 东南大区</p><h1>汇总简报</h1><p>按日期提取每人的进展与计划，可点开原始日报核对。</p></div><span class="pill">按原文提取</span></div>
+<div class="panel filters summarizer"><label>开始日期<input type="date" id="summary-from"></label><label>结束日期<input type="date" id="summary-to"></label><button id="generate" class="primary">生成简报</button><button id="copy" class="subtle" disabled>复制简报</button><span id="summary-status" role="status"></span></div>
+<div id="summary-output" class="panel summary-output" aria-live="polite"></div>
+</section>
+<p id="system-status" role="status"></p>
+</main>
+<dialog id="detail"><div class="dialog-head"><h2>日报详情</h2><button class="subtle" id="close-detail">关闭</button></div><div id="detail-body"></div></dialog>
+<dialog id="lightbox"><div class="dialog-head"><h2>现场照片</h2><button class="subtle" id="close-photo">关闭</button></div><img alt="日报现场照片" id="full-photo"></dialog>
+<script>
+"use strict";
+
+const samples = [
+  {
+    "id": "demo-1",
+    "author": "示例农艺师 A",
+    "region": "东南一区",
+    "place": "青禾示范点",
+    "work": "1. 回访鲜食玉米示范田，记录降温后的出苗情况。\n2. 和零售网点确认下周田间观摩时间。",
+    "plan": "复查低温地块苗情。",
+    "date": "2026-11-20",
+    "photos": []
+  },
+  {
+    "id": "demo-2",
+    "author": "示例农艺师 B",
+    "region": "东南一区",
+    "place": "田湾服务点",
+    "work": "1. 跟进水稻田间观摩会的参会名单。\n2. 整理测产图片和记录。",
+    "plan": "核对参会人员名单。",
+    "date": "2026-11-20",
+    "photos": []
+  },
+  {
+    "id": "demo-3",
+    "author": "示例农艺师 C",
+    "region": "东南二区",
+    "place": "南溪示范点",
+    "work": "1. 走访甘蔗示范田，约定下周回访。\n2. 与种植户沟通后续长势记录。",
+    "plan": "整理测量工具与记录表。",
+    "focus": "下周跟进甘蔗示范田长势。",
+    "date": "2026-11-20",
+    "photos": []
+  },
+  {
+    "id": "demo-4",
+    "author": "示例农艺师 D",
+    "region": "东南二区",
+    "place": "石桥服务点",
+    "work": "1. 拜访农资网点，了解秋季用肥需求。\n2. 准备种植户培训材料。",
+    "plan": "确认下一次培训时间。",
+    "date": "2026-11-20",
+    "photos": []
+  }
+];
+
+const el = id => document.getElementById(id);
+const selectors = ["query","person","from","to"];
+const dateToday = () => new Intl.DateTimeFormat("sv-SE",{timeZone:"Asia/Shanghai"}).format(new Date());
+let records = [...samples];
+let focusOnly = false;
+let db;
+let summaryText = "";
+let previousPerson = "";
+
+function node(tag, label, className) {
+  const result = document.createElement(tag);
+  if (label !== undefined) result.textContent = label;
+  if (className) result.className = className;
+  return result;
+}
+
+function action(label, onClick, className) {
+  const button = node("button", label, className);
+  button.type = "button";
+  button.addEventListener("click", onClick);
+  return button;
+}
+
+function openDatabase() {
+  return new Promise((resolve,reject) => {
+    const request = indexedDB.open("southeast-field-report-public-demo-v1",1);
+    request.onupgradeneeded = () => request.result.createObjectStore("reports",{keyPath:"id"});
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+function readSaved() {
+  return new Promise((resolve,reject) => {
+    const request = db.transaction("reports").objectStore("reports").getAll();
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+function save(record) {
+  if (!db) return Promise.reject(new Error("Storage unavailable"));
+  return new Promise((resolve,reject) => {
+    const tx = db.transaction("reports","readwrite");
+    tx.objectStore("reports").put(record);
+    tx.oncomplete = resolve;
+    tx.onabort = () => reject(tx.error);
+  }).then(() => {
+    records = [record,...records.filter(row => row.id !== record.id)];
+  });
+}
+
+function switchPage(page) {
+  for (const button of document.querySelectorAll("[data-page]")) {
+    const selected = button.dataset.page === page;
+    el(button.dataset.page).hidden = !selected;
+    if (selected) button.setAttribute("aria-current","page");
+    else button.removeAttribute("aria-current");
+  }
+  if (page === "form") refreshDefaultDate();
+  window.scrollTo(0,0);
+}
+
+function ordered(list) {
+  return [...list].sort((a,b) => b.date.localeCompare(a.date) || (b.created ?? 0) - (a.created ?? 0));
+}
+
+function uniqueOptions(values) {
+  return [...new Set(values.filter(Boolean))].sort((a,b) => a.localeCompare(b,"zh-CN"));
+}
+
+function localSubmissions() {
+  return records.filter(row => Number.isFinite(row.created)).sort((a,b) => b.created - a.created);
+}
+
+function updateOptions() {
+  const chosen = el("person").value;
+  const names = uniqueOptions(records.map(row => row.author));
+  el("person").replaceChildren(new Option("全部人员",""),...names.map(name => new Option(name,name)));
+  el("person").value = names.includes(chosen) ? chosen : "";
+
+  const local = localSubmissions();
+  for (const [field,label] of [["author","历史姓名"],["place","历史地点"]]) {
+    const options = uniqueOptions(local.map(row => row[field]));
+    const select = el(field+"-history");
+    select.replaceChildren(new Option(label,""),...options.map(value => new Option(value,value)));
+    select.disabled = !options.length;
+  }
+}
+
+function applyLastSubmission(row) {
+  if (!row) return;
+  el("author").value = row.author;
+  el("region").value = row.region;
+  el("place").value = row.place;
+  previousPerson = row.author;
+}
+
+function refreshDefaultDate() {
+  const date = el("date");
+  if (!date.value || date.value === date.defaultValue) {
+    date.value = dateToday();
+    date.defaultValue = date.value;
+  }
+}
+
+function photoButton(src,label,className,onClick) {
+  const button = action(undefined,onClick,className);
+  button.setAttribute("aria-label",label);
+  const img = node("img");
+  img.src = src;
+  img.alt = "";
+  img.loading = "lazy";
+  button.append(img);
+  return button;
+}
+
+function meta(row) {
+  return [row.date,row.region,row.place].filter(Boolean).join(" · ");
+}
+
+function inRange(row,from,to) {
+  return (!from || row.date >= from) && (!to || row.date <= to);
+}
+
+function renderLedger() {
+  const latest = ordered(records)[0]?.date;
+  const reports = records.filter(row => row.date === latest);
+  el("metrics").replaceChildren(...[
+    [reports.length, latest ? latest.slice(5).replace("-","/")+" 日报" : "最新日报"],
+    [new Set(reports.map(row => row.author)).size,"当日已报人数"],
+    [records.filter(row => row.focus).length,"关注事项"]
+  ].map(([count,label]) => {
+    const metric = node("div",undefined,"metric");
+    metric.append(node("strong",count),node("span",label));
+    return metric;
+  }));
+
+  const terms = el("query").value.toLowerCase().trim().split(/\s+/).filter(Boolean);
+  const person = el("person").value;
+  const from = el("from").value;
+  const to = el("to").value;
+  const visible = ordered(records.filter(row => {
+    const haystack = [row.author,row.region,row.place,row.work,row.plan,row.focus].join(" ").toLowerCase();
+    return (!focusOnly || row.focus) && (!person || row.author === person) &&
+      inRange(row,from,to) && terms.every(term => haystack.includes(term));
+  }));
+  el("all").setAttribute("aria-pressed",String(!focusOnly));
+  el("focused").setAttribute("aria-pressed",String(focusOnly));
+  el("count").textContent = visible.length + " 条记录";
+  const cards = visible.map(row => {
+    const card = node("article",undefined,"card");
+    const body = node("div",undefined,"card-text");
+    const title = node("h2",row.author);
+    if (row.focus) title.append(node("span","已关注","badge"));
+    body.append(title,node("p",meta(row),"meta"),node("p",focusOnly ? row.focus : row.work,"excerpt"),
+      action("查看原文与照片",() => showReport(row.id),"open-report"));
+    card.append(body);
+    if (row.photos.length) card.append(photoButton(row.photos[0],"查看"+row.author+"的日报", "thumb",() => showReport(row.id)));
+    return card;
+  });
+  el("records").replaceChildren(...(cards.length ? cards : [node("div",from && to && from > to ? "开始日期需早于或等于结束日期。" : "当前条件下暂无记录。","panel empty")]));
+}
+
+function showReport(id) {
+  const row = records.find(item => item.id === id);
+  const detail = el("detail-body");
+  detail.replaceChildren(node("h3",row.author),node("p",meta(row),"meta"),
+    node("h3","今日工作"),node("p",row.work,"detail-text"),
+    node("h3","明日计划"),node("p",row.plan || "未填写","detail-text"));
+  if (row.photos.length) {
+    const section = node("section",undefined,"detail-section");
+    const gallery = node("div",undefined,"gallery");
+    gallery.append(...row.photos.map((src,i) => photoButton(src,"放大第 "+(i+1)+" 张照片","photo-button",() => {
+      el("full-photo").src = src;
+      el("lightbox").showModal();
+    })));
+    section.append(node("h3","现场照片"),gallery);
+    if (row.tentative) section.append(node("small","此图未署名，按样例顺序暂配。"));
+    detail.append(section);
+  }
+
+  const section = node("section",undefined,"detail-section");
+  const label = node("label","关注事项");
+  const input = node("textarea");
+  input.rows = 2;
+  input.maxLength = 500;
+  input.placeholder = "例如，追踪示范田下一次长势";
+  input.value = row.focus ?? "";
+  label.append(input);
+  const status = node("small");
+  status.setAttribute("role","status");
+  const buttons = node("div",undefined,"actions");
+  async function updateFocus(value) {
+    buttons.querySelectorAll("button").forEach(button => { button.disabled = true; });
+    try {
+      await save({...row,focus:value});
+      renderLedger();
+      showReport(id);
+      el("detail-body").querySelector("[role=status]").textContent = value ? "已保存到我的关注。" : "已取消关注。";
+    } catch {
+      status.textContent = "保存失败，请检查浏览器存储权限后重试。";
+      buttons.querySelectorAll("button").forEach(button => { button.disabled = false; });
+    }
+  }
+  buttons.append(action("保存关注",() => {
+    if (input.value.trim()) updateFocus(input.value.trim());
+    else status.textContent = "请填写要跟进的事项。";
+  },"primary"));
+  if (row.focus) buttons.append(action("取消关注",() => updateFocus(""),"subtle"));
+  buttons.append(status);
+  section.append(label,buttons);
+  detail.append(section);
+  if (!el("detail").open) el("detail").showModal();
+}
+
+function generateSummary() {
+  const from = el("summary-from").value;
+  const to = el("summary-to").value;
+  const output = el("summary-output");
+  el("summary-status").textContent = "";
+  const rows = from && to && from > to ? [] : ordered(records.filter(row => inRange(row,from,to)));
+  output.replaceChildren();
+  summaryText = "";
+  el("copy").disabled = true;
+  if (!rows.length) {
+    output.textContent = from && to && from > to ? "开始日期需早于或等于结束日期。" : "选定日期范围内暂无日报。";
+    return;
+  }
+  const range = from === to && from ? from : (from || rows.at(-1).date)+" 至 "+(to || rows[0].date);
+  const heading = "东南大区工作简报 · "+range;
+  const count = rows.length+" 份日报 · "+new Set(rows.map(row => row.author)).size+" 人";
+  output.append(node("h2",heading),node("p",count,"meta"));
+  const blocks = rows.map(row => {
+    const article = node("article");
+    const title = row.author+" · "+row.place+" · "+row.date;
+    const plan = row.plan ? "明日计划："+row.plan : "";
+    const follow = row.focus ? "关注："+row.focus : "";
+    article.append(node("h3",title),node("p",row.work));
+    if (plan) article.append(node("p",plan));
+    if (follow) article.append(node("p",follow));
+    article.append(action("核对原始日报与照片",() => showReport(row.id),"source"));
+    output.append(article);
+    return [title,row.work,plan,follow].filter(Boolean).join("\n");
+  });
+  summaryText = [heading,count,...blocks].join("\n\n");
+  el("copy").disabled = false;
+}
+
+function resetFilters() {
+  selectors.forEach(id => { el(id).value = ""; });
+  focusOnly = false;
+  renderLedger();
+}
+
+function fillRegion() {
+  const author = el("author").value.trim();
+  const region = el("region");
+  const recent = [...localSubmissions(),...samples];
+  const previousRegion = recent.find(row => row.author === previousPerson)?.region ?? "";
+  if (!region.value || region.value === previousRegion) {
+    region.value = recent.find(row => row.author === author)?.region ?? "";
+  }
+  previousPerson = author;
+}
+
+function readPhoto(file) {
+  return new Promise((resolve,reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
+for (const button of document.querySelectorAll("[data-page]")) {
+  button.addEventListener("click",() => {
+    const page = button.dataset.page;
+    switchPage(page);
+    if (page === "summary") generateSummary();
+  });
+}
+selectors.forEach(id => el(id).addEventListener("input",renderLedger));
+el("reset").addEventListener("click",resetFilters);
+el("all").addEventListener("click",() => { focusOnly = false; renderLedger(); });
+el("focused").addEventListener("click",() => { focusOnly = true; renderLedger(); });
+el("close-detail").addEventListener("click",() => el("detail").close());
+el("close-photo").addEventListener("click",() => el("lightbox").close());
+el("author").addEventListener("change",fillRegion);
+for (const field of ["author","place"]) {
+  const history = el(field+"-history");
+  history.addEventListener("change",() => {
+    if (!history.value) return;
+    el(field).value = history.value;
+    history.value = "";
+    if (field === "author") fillRegion();
+  });
+}
+el("generate").addEventListener("click",generateSummary);
+el("copy").addEventListener("click",async () => {
+  const status = el("summary-status");
+  try {
+    await navigator.clipboard.writeText(summaryText);
+    status.textContent = "已复制，可以粘贴到微信或文档。";
+  } catch {
+    status.textContent = "浏览器限制了剪贴板访问，请选择简报文字后手动复制。";
+  }
+});
+
+refreshDefaultDate();
+el("summary-from").value = samples[0].date;
+el("summary-to").value = samples[0].date;
+el("photos").addEventListener("change",() => {
+  el("selection").replaceChildren(...Array.from(el("photos").files,file => node("span",file.name)));
+});
+
+el("report-form").addEventListener("submit",async event => {
+  event.preventDefault();
+  const status = el("form-status");
+  const fields = Object.fromEntries([...new FormData(event.currentTarget)].map(([key,value]) => [key,value.trim()]));
+  if (!fields.author || !fields.place || !fields.work) {
+    status.textContent = "请填写姓名、工作地点和今日工作。";
+    return;
+  }
+  const files = [...el("photos").files];
+  if (files.length > 9 || files.some(file => !/^image\/(jpeg|png|gif|webp|avif|bmp|heic|heif)$/.test(file.type) || file.size > 20*1024*1024)) {
+    status.textContent = "最多选 9 张常见格式照片，单张不超过 20 MB。";
+    return;
+  }
+  const form = event.currentTarget;
+  const submit = el("submit");
+  submit.disabled = true;
+  status.textContent = "正在保存…";
+  try {
+    const photos = await Promise.all(files.map(readPhoto));
+    const created = Date.now();
+    const id = globalThis.crypto?.randomUUID?.() ?? ("report-"+created+"-"+Math.random().toString(36).slice(2));
+    const record = {...fields,id,created,photos};
+    await save(record);
+    form.reset();
+    refreshDefaultDate();
+    applyLastSubmission(record);
+    el("selection").replaceChildren();
+    status.textContent = "";
+    updateOptions();
+    resetFilters();
+    el("summary-from").value = fields.date;
+    el("summary-to").value = fields.date;
+    switchPage("ledger");
+    el("system-status").textContent = "已保存日报。";
+    showReport(id);
+  } catch {
+    status.textContent = "保存失败，请检查浏览器存储权限，或减少照片后重试。";
+  } finally {
+    submit.disabled = false;
+  }
+});
+
+updateOptions();
+renderLedger();
+openDatabase().then(async database => {
+  db = database;
+  const saved = await readSaved();
+  const ids = new Set(saved.map(row => row.id));
+  records = [...saved,...samples.filter(row => !ids.has(row.id))];
+  if (["author","region","place"].every(field => !el(field).value)) {
+    applyLastSubmission(localSubmissions()[0]);
+  }
+  updateOptions();
+  renderLedger();
+  if (!el("summary").hidden) generateSummary();
+}).catch(() => {
+  el("system-status").textContent = "当前浏览器未开放本地保存，可浏览样例。";
+});
+
+</script>
+</body>
+</html>
