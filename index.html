@@ -113,7 +113,7 @@ dialog::backdrop{background:#102820aa}
 <form id="report-form" class="panel form-panel">
 <details><summary>导入通讯录（本机）</summary><label>选择 .xlsx 通讯录<input type="file" id="roster-file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"></label><small>读取第一张表的姓名和部门，名单只保存在当前浏览器。</small><p id="roster-import-status" role="status"></p></details>
 <div class="form-grid">
-<div><label for="author">汇报人</label><div class="with-history"><input id="author" name="author" required maxlength="32" placeholder="输入姓名或从通讯录选择" list="roster-options"><datalist id="roster-options"></datalist><select id="author-history" aria-label="选择历史姓名" disabled><option value="">历史姓名</option></select></div></div>
+<div><label for="author">汇报人</label><div class="with-history"><input id="author" name="author" required maxlength="32" placeholder="输入姓氏或姓名" autocomplete="off"><datalist id="roster-options"></datalist><select id="author-history" aria-label="选择历史姓名" disabled><option value="">历史姓名</option></select></div></div>
 <label>所属区域<input id="region" name="region" maxlength="40" placeholder="选定汇报人后自动带出"><small id="roster-status" aria-live="polite"></small></label>
 <div><label for="place">工作地点</label><div class="with-history"><input id="place" name="place" required maxlength="70" placeholder="输入地点"><select id="place-history" aria-label="选择历史地点" disabled><option value="">历史地点</option></select></div></div>
 <label>工作日期<input id="date" name="date" type="date" required></label>
@@ -523,6 +523,24 @@ let lastAutomaticRegion = "";
 const rosterFileKey="yonfer-daily-roster-v1";
 const rosterByName=new Map();
 
+function refreshRosterSuggestions() {
+  const author=el("author");
+  const list=el("roster-options");
+  const prefix=author.value.trim().split("｜",1)[0];
+  const options=[];
+  if (prefix) {
+    for (const [name,regions] of rosterByName) {
+      if (!name.startsWith(prefix)) continue;
+      for (const region of regions) {
+        options.push(new Option(regions.length===1 ? region : "",regions.length===1 ? name : name+"｜"+region));
+      }
+    }
+  }
+  list.replaceChildren(...options);
+  if (options.length) author.setAttribute("list","roster-options");
+  else author.removeAttribute("list");
+}
+
 function installRoster(entries) {
   rosterByName.clear();
   for (const [name,region] of entries) {
@@ -530,13 +548,7 @@ function installRoster(entries) {
     if (!regions.includes(region)) regions.push(region);
     rosterByName.set(name,regions);
   }
-  const options=[];
-  for (const [name,regions] of rosterByName) {
-    for (const region of regions) {
-      options.push(new Option(regions.length===1 ? region : "",regions.length===1 ? name : name+"｜"+region));
-    }
-  }
-  el("roster-options").replaceChildren(...options);
+  refreshRosterSuggestions();
 }
 
 function readSavedRoster() {
@@ -711,6 +723,7 @@ function applyLastSubmission(row) {
   el("region").value = row.region;
   el("place").value = row.place;
   previousPerson = row.author;
+  refreshRosterSuggestions();
   lastAutomaticRegion = row.region;
   el("roster-status").textContent = "";
 }
@@ -901,6 +914,7 @@ function fillRegion() {
     status.textContent=matches.length>1 ? "有同名人员，请从候选项选择所属区域。" : "";
   }
   previousPerson=name;
+  refreshRosterSuggestions();
 }
 
 function readPhoto(file) {
